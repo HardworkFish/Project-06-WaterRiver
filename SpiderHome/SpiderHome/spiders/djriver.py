@@ -47,7 +47,7 @@ class GdsqSpider(Spider):
                 soup.find(
                     'td', class_="ifont1", attrs={'colspan': '5'}).get_text()
                     .split('\t')[0].strip().split('\u3000')[-1])[0])
-        print("!!!!!!!!!!!!!!!!!!!!!", page)
+        # print("!!!!!!!!!!!!!!!!!!!!!", page)
         trs = soup.find_all('table')[1].find_all('tr')
         trs.pop()
         trs.reverse()
