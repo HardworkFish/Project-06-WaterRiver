@@ -12,7 +12,7 @@ from SpiderHome.store import GDSWDB, GdsqDB
 class GdsqPipeline(object):
     def process_item(self, item, spider):
         spec = {'station': item['station'], 'time': item['time']}
-        GdsqDB.djriver.update(spec, {'$set': dict(item)}, upsert=True)
+        GdsqDB.djriver_.update(spec, {'$set': dict(item)}, upsert=True)
         return None
 
 
