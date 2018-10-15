@@ -24,11 +24,15 @@ class GdsqSpider(Spider):
         #         str(crawl_day), str(crawl_day))
         #     yield Request(url, callback=self.parse)
         #     crawl_day = crawl_day + timedelta(1)
-        url = 'http://www.djriver.cn/xxfb/sqyq_cen.asp?page=1&jctime=%s&jctime1=%s&zm=' % (
-                '2008-09-01', '2009-09-01')
-        yield Request(url, callback=self.parse)
+        # url = 'http://www.djriver.cn/xxfb/sqyq_cen.asp?page=1&jctime=%s&jctime1=%s&zm=' % (
+        #         '2008-09-01', '2008-12-31')
+        for i in range(2009, 2010):
+            url = 'http://www.djriver.cn/xxfb/sqyq_cen.asp?page=1&jctime=%s-09-01&jctime1=%s-12-31&zm=' % (
+                i, i)
+            yield Request(url, meta={'year': str(i)},  callback=self.parse)
 
     def parse(self, response):
+        year = response.meta['year']
         soup = BS(response.body, 'lxml', from_encoding='utf-8')
 
         now_page = int(findall('\\d+', response.url)[0])
@@ -57,6 +61,7 @@ class GdsqSpider(Spider):
         for tr in trs:
              item = GdsqItem()
              tds = tr.find_all('td')
+             item['year'] = year
              item['station'] = tds[0].get_text().strip()
              item['time'] = tds[1].get_text().strip()
              item['water_level'] = tds[2].get_text().strip()
@@ -66,7 +71,7 @@ class GdsqSpider(Spider):
              yield item
         if now_page < page:
              url = sub('page=\\d+', 'page=%d' % (now_page + 1), response.url)
-             yield Request(url, callback=self.parse)
+             yield Request(url,  meta={'year': year}, callback=self.parse)
 
 
 

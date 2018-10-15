@@ -9,6 +9,7 @@ import scrapy
 
 
 class GdsqItem(scrapy.Item):
+    year = scrapy.Field()
     station = scrapy.Field()
     time = scrapy.Field()
     water_level = scrapy.Field()
