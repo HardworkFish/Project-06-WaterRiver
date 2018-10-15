@@ -12,7 +12,7 @@ from SpiderHome.store import GDSWDB, GdsqDB
 class GdsqPipeline(object):
     def process_item(self, item, spider):
         spec = {'station': item['station'], 'time': item['time']}
-        GdsqDB.djriver_.update(spec, {'$set': dict(item)}, upsert=True)
+        GdsqDB.djriver_.insert(spec, {'$set': dict(item)}, upsert=True)
         return None
 
 
@@ -26,7 +26,7 @@ class GdwaterPipeline(object):
         }
         thread = item.get('thread', None)
         item.pop('thread')
-        GdsqDB[thread].update(spec, {'$set': dict(item)}, upsert=True)
+        GdsqDB[thread].insert(spec, {'$set': dict(item)}, upsert=True)
         return None
 
 
@@ -36,6 +36,6 @@ class GdswPipeline(object):
         print(item['tm'])
         thread = item.get('thread', None)
         item.pop('thread')
-        GDSWDB[thread].update(spec, {'$set': dict(item)}, upsert=True)
+        GDSWDB[thread].insert(spec, {'$set': dict(item)}, upsert=True)
         return item
 
